@@ -2,12 +2,12 @@ bancopedfgeneralcell = input ('Entrar banco PeDfs: ');
 C=1;
 Linha=1;
 Coluna=1;
-delta=zeros; 
-bancodeltas=cell(1,465);
+delta=zeros(30,6); 
+bancodeltasdup=cell(1,465);
 
 while (Coluna<=465)
 Linha=1;
-delta=zeros;
+delta=zeros(30,6);
     while (Linha<=6)
         bancopedfcell=bancopedfgeneralcell(Linha,Coluna);
         bancopedfs=bancopedfcell{1,1};
@@ -71,12 +71,22 @@ delta=zeros;
         v=0;
         rcr=zeros;
         while (canddelta(L+5,C)>0)
-            while (canddelta(l+5,C)>0)
-                if (canddelta(L,C)==canddelta(l,C))
-                    v=v+1;
-                else
-                end
-                l=l+5;
+            while (l>0) %formular melhor
+                if (canddelta(l+5,C)>0 && l>L)
+                    if (canddelta(L,C)==canddelta(l,C))
+                        v=v+1;
+                    end
+                    l=l+5;
+                else 
+                    if (l<L)
+                        if (canddelta(L,C)==canddelta(l,C))
+                            v=v+1;
+                        end 
+                    else
+                    l=L;
+                    end
+                    l=l-5;
+                end 
             end
             rcr(L,C)=v;
             L=L+1;
@@ -101,20 +111,22 @@ delta=zeros;
             L=L+1;
         end
         L=1;
-        t=tamanho/1.2;
-        while (rcr(L+1,C)<500)
-                if (rcr(l,C)<500)
-                    while (rcr(L,C)>=rcr(l,C))
-                        v=v+1;
-                        if (v>t && v<t+1)
-                            delta(n,Linha)=canddelta(L,C);
-                            n=n+1;
+        t=tamanho/1.02;
+        fi=1;
+        while (rcr(L+1,C)<500) %&& 
+            while(fi<10000)
+                    while (l>L && rcr(l,C)<500)
+                        if (rcr(L,C)>=rcr(l,C))
+                            v=v+1;
+                            if (v>t && v<t+1)
+                                delta(n,Linha)=canddelta(L,C);
+                                n=n+1;
+                            end
                         end
-                        l=l+1;
+                    l=l+1;
                     end
-                elseif (rcr(l,C)==500) 
                     l=1;
-                    while (l<L)
+                    while (l<=L)
                         if (rcr(L,C)>=rcr(l,C))
                             v=v+1;
                             if (v>t && v<t+1)
@@ -124,13 +136,19 @@ delta=zeros;
                         end 
                         l=l+1;
                     end
-                end
+                    fi=10000;
+
+            end
+            fi=1;
             L=L+1;
             l=L+1;
             v=0;
+            
+ 
         end
         Linha=Linha+1;
     end
-bancodeltas{1,Coluna}=delta(:,:);
+bancodeltasdup{1,Coluna}=delta(:,:);
 Coluna=Coluna+1;
 end
+
