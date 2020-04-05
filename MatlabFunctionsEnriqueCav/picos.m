@@ -2,12 +2,12 @@ bancopedfgeneralcell = input ('Entrar banco PeDfs: ');
 C=1;
 Linha=1;
 Coluna=1;
-delta=zeros(30,6); 
+delta=zeros; 
 bancodeltasdup=cell(1,465);
 
 while (Coluna<=465)
 Linha=1;
-delta=zeros(30,6);
+delta=zeros;
     while (Linha<=6)
         bancopedfcell=bancopedfgeneralcell(Linha,Coluna);
         bancopedfs=bancopedfcell{1,1};
