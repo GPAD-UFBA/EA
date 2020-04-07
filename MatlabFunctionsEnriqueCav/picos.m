@@ -1,14 +1,14 @@
 bancopedfgeneralcell = input ('Entrar banco PeDfs: ');
-
+ordem=size(bancopedfgeneralcell);
 Linha=1;
 Coluna=1;
 delta=zeros; 
-bancodeltasdup=cell(1,465);
+bancodeltasdup=cell(1,ordem(1,2));
 
-while (Coluna<=465)
+while (Coluna<=ordem(1,2))
 Linha=1;
 delta=zeros;
-    while (Linha<=6)
+    while (Linha<=ordem(1,1))
         bancopedfcell=bancopedfgeneralcell(Linha,Coluna);
         bancopedfs=bancopedfcell{1,1};
 
@@ -102,7 +102,6 @@ delta=zeros;
 
 
         tamanho=0;
-
         while (rcr(L,1)<500) %Conta o tamanho do vetor de recorrência
             tamanho=tamanho+1;
             L=L+1;
@@ -133,7 +132,7 @@ delta=zeros;
                         end 
                         l=l+1;
                     end
-                    delta(n,Linha)=500;
+                    delta(n,Linha)=0;
                     fi=10000;
 
             end
@@ -151,66 +150,26 @@ bancodeltasdup{1,Coluna}=delta(:,:);
 Coluna=Coluna+1;
 end
 
+ordem3=size(bancodeltasdup);
+ordem4=size(bancodeltasdup{1,1});
 Coluna=1;
 L=1;
 C=1;
+bancodeltaspp=zeros;
 bancodeltasp=zeros;
-l=0;
-bancodeltas=cell(1,465);
+banco=cell(zeros);
+bancodeltasps=cell(1,ordem3(1,2));
 
-while (Coluna<=465)
+while (Coluna<=ordem3(1,2))
     bancodeltasd=bancodeltasdup(1,Coluna);
-    bancodeltaspp=bancodeltasd{1,1};
-    while (C<=6)
-        while (bancodeltaspp(L+1,C)<500)
-                if (bancodeltaspp(L,C)==bancodeltaspp(L+1,C))
-                    l=l+1;
-                    bancodeltasp(l,C)=bancodeltaspp(L,C);
-                    if (l>=2)
-                    k=l-1;
-                        while (k>=1)
-                            if (bancodeltasp(l,C)==bancodeltasp(k,C))
-                                bancodeltasp(l,C)=0;
-                                l=l-1;
-                            end
-                            k=k-1;
-                        end
-                    end
-                else
-                   if (l==0)
-                       l=l+1;
-                       bancodeltasp(l,C)=bancodeltaspp(L,C);
-                   elseif (l==1)
-                        l=l+1;
-                        bancodeltasp(l,C)=bancodeltaspp(L,C);
-                        if (l>=2)
-                        k=l-1;
-                            while (k>=1)
-                                if (bancodeltasp(l,C)==bancodeltasp(k,C))
-                                    bancodeltasp(l,C)=0;
-                                    l=l-1;
-                                end
-                                k=k-1; 
-                            end
-                        end
-                   else
-                       k=l-1;
-                       while (k>=1)
-                            if (bancodeltasp(l,C)==bancodeltasp(k,C))
-                                bancodeltasp(l,C)=0;
-                                l=l-1;
-                            end
-                            k=k-1; 
-                       end
-                   end
-                end
-                L=L+1;
-        end
+    bancodeltasppp=bancodeltasd{1,1};
+    while (C<=ordem4(1,2)) %(C<=6)
+        bancodeltaspp=unique(bancodeltasppp(:,C));
+        bancodeltasp=sort(bancodeltaspp,'descend');
+        banco{1,C}=bancodeltasp;
         C=C+1;
-        L=1;
-        l=0;
     end
-    bancodeltas{1,Coluna}=bancodeltasp(:,:);
+    bancodeltasps{1,Coluna}=banco(1,:);
     Coluna=Coluna+1;
     C=1;
 end
