@@ -9,15 +9,16 @@ while (Coluna<=ordem(1,2))
 Linha=1;
 delta=zeros;
     while (Linha<=ordem(1,1))
-        bancopedfcell=bancopedfgeneralcell(Linha,Coluna);
-        bancopedfs=bancopedfcell{1,1};
-
+        bancopedfcell=bancopedfgeneralcell{Linha,Coluna};
+        bancopedfs=bancopedfcell(:,1);
+    
         L=1;
         l=1;
         n=0;
         posicoes=zeros; 
+        ordem2=size(bancopedfcell(:,1));
 
-        for cont=1:512
+        for cont=1:ordem2(1,1)-1 
             if (bancopedfs(L,1)==1) %Início no valor 1
                 n=n+1; 
             elseif(bancopedfs(L,1) > bancopedfs(L+1,1) && bancopedfs(L,1) > bancopedfs(L-1,1)) %Encontrando cada pico
@@ -93,7 +94,7 @@ delta=zeros;
             v=0;
         end
 
-        rcr(L,1)=500;
+        rcr(L,1)=200;
         L=1;
         n=1;
         l=L+1;
@@ -102,19 +103,21 @@ delta=zeros;
 
 
         tamanho=0;
-        while (rcr(L,1)<500) %Conta o tamanho do vetor de recorrência
+        tamanho2=size(rcr);
+        while (rcr(L,1)<200) %Conta o tamanho do vetor de recorrência
             tamanho=tamanho+1;
             L=L+1;
         end
         L=1;
         t=tamanho/1.00000000001;
+        
         fi=1;
-        while (rcr(L+1,1)<500) %&& 
+        while (rcr(L+1,1)<200) %&& 
             while(fi<10000)
-                    while (l>L && rcr(l,1)<500)
+                    while (l>L && rcr(l,1)<200)
                         if (rcr(L,1)>=rcr(l,1))
                             v=v+1;
-                            if (v>t && v<t+1)
+                            if (v==tamanho)
                                 delta(n,Linha)=canddelta(L,1);
                                 n=n+1;
                             end
@@ -125,7 +128,7 @@ delta=zeros;
                     while (l<=L)
                         if (rcr(L,1)>=rcr(l,1))
                             v=v+1;
-                            if (v>t && v<t+1)
+                            if (v==tamanho)
                                 delta(n,Linha)=canddelta(L,1);
                                 n=n+1;
                             end
