@@ -1,13 +1,16 @@
 bancopedfgeneralcell = input ('Entrar banco PeDfs: ');
+div = input ('Entrar com Divergência a ser utilizada: ');
 ordem=size(bancopedfgeneralcell);
 Linha=1;
 Coluna=1;
 delta=zeros; 
-bancodeltasdup=cell(1,ordem(1,2));
+bancodeltaspsalt=cell(1,ordem(1,2));
+
 
 while (Coluna<=ordem(1,2))
 Linha=1;
 delta=zeros;
+media=zeros;
     while (Linha<=ordem(1,1))
         bancopedfcell=bancopedfgeneralcell{Linha,Coluna};
         bancopedfs=bancopedfcell(:,1);
@@ -93,90 +96,39 @@ delta=zeros;
             l=L+5; 
             v=0;
         end
-
-        rcr(L,1)=200;
-        L=1;
-        n=1;
-        l=L+1;
-
-        %Ver qual delta P se repete mais vezes em cada faixa de deltas Ps
-
-
-        tamanho=0;
-        tamanho2=size(rcr);
-        while (rcr(L,1)<200) %Conta o tamanho do vetor de recorrência
-            tamanho=tamanho+1;
-            L=L+1;
-        end
-        L=1;
-        t=tamanho/1.00000000001;
         
-        fi=1;
-        while (rcr(L+1,1)<200) %&& 
-            while(fi<10000)
-                    while (l>L && rcr(l,1)<200)
-                        if (rcr(L,1)>=rcr(l,1))
-                            v=v+1;
-                            if (v==tamanho)
-                                delta(n,Linha)=canddelta(L,1);
-                                n=n+1;
-                            end
-                        end
-                    l=l+1;
-                    end
-                    l=1;
-                    while (l<=L)
-                        if (rcr(L,1)>=rcr(l,1))
-                            v=v+1;
-                            if (v==tamanho)
-                                delta(n,Linha)=canddelta(L,1);
-                                n=n+1;
-                            end
-                        end 
-                        l=l+1;
-                    end
-                    delta(n,Linha)=0;
-                    fi=10000;
-
-            end
-            fi=1;
-            L=L+1;
-            l=L+1;
-            v=0;
+        mediaparcial=zeros(5,1);
+        c=1;
+        reset=1;
+        %Média Ponderada 
+        for cont=1:5
+            l=cont;
+            while (reset==1)
+                if (l>length(rcr))
+                    l=cont-5;
+                else
+                    mediaparcial(cont) = mediaparcial(cont) + ((canddelta(l,c)*rcr(l,c))/length(rcr)); 
+                    l=l+5;
+                end
+                if (l<=0)
+                   reset = 0;
+                end
+            end  
+            reset=1;
         end
-
         
-        %TIRAR COMENTÁRIO A PARTIR DAQUI
+        media(1,Linha)=((sum(mediaparcial))/length(mediaparcial))/10;
+        
         %Repetição para todas as resoluções Wavelet
         Linha=Linha+1;
     end
     %Repetição para todas as colunas de PeDF's
-bancodeltasdup{1,Coluna}=delta(:,:);
+    bancodeltaspsalt{1,Coluna}=media(:,:);
 Coluna=Coluna+1;
+Linha=1;
 end
 
-ordem3=size(bancodeltasdup);
-ordem4=size(bancodeltasdup{1,1});
-Coluna=1;
-L=1;
-C=1;
-bancodeltaspp=zeros;
-bancodeltasp=zeros;
-banco=cell(zeros);
-bancodeltasps=cell(1,ordem3(1,2));
-
-while (Coluna<=ordem3(1,2))
-    bancodeltasd=bancodeltasdup(1,Coluna);
-    bancodeltasppp=bancodeltasd{1,1};
-    while (C<=ordem4(1,2)) %(C<=6)
-        bancodeltaspp=unique(bancodeltasppp(:,C));
-        bancodeltasp=sort(bancodeltaspp,'descend');
-        banco{1,C}=bancodeltasp;
-        C=C+1;
-    end
-    bancodeltasps{1,Coluna}=banco(1,:);
-    Coluna=Coluna+1;
-    C=1;
-end
+%%
+[smrcr] = divfun (bancodeltaspsalt);
 
 

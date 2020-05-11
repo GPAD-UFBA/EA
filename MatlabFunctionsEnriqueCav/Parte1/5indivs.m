@@ -1,6 +1,6 @@
 
 
-function [DV] = indivs (var,mu1,mu2,sigma1,sigma2,passo,varargin)
+function [DV] = 5indivs (var,mu1,mu2,sigma1,sigma2,passo,varargin)
 %  Enrique de Jesus Cavalcante - Ultima atualização: 21/03/2019
 %  OBJ: Medir a Divergência de KL, Jensen-Shannon, Variante Simétrica, I e 
 % a Generalizada 
