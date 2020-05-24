@@ -6,12 +6,16 @@ load ('C:\Users\Enrique\Documents\8. GPAD\EA\MatlabFunctionsEnriqueCav\BancoUtil
 
 %% =========== Part 2: Regularized Linear Regression Cost =============
 theta = rand(size(X_train,1),1);
-[J, grad] = linearRegCostFunction(X_train, Y_train, theta, 1);
+num_iters = 750;
+[J, grad] = linearRegCostFunction(X_train, Y_train, theta, 1,num_iters);
 
 fprintf(['Cost at theta =  %f '], J);
 fprintf('Program paused. Press enter to continue.\n');
 pause;
-fprintf(['Gradient at theta = [%f; %f] '], grad(1), grad(2));  
+fprintf(['Gradient at theta = [%f; %f] '], grad(1), grad(2));
+m = length(Y_train);
+plot(1:m, Y_train, 1:m, X_train'*grad);
+%plot(1:115, Y_val, 1:115, X_val'*grad);
 fprintf('Program paused. Press enter to continue.\n');
 pause;
 
@@ -22,7 +26,7 @@ lambda = 0;
 [error_train, error_val] = ...
     learningCurve(X_train, Y_train, ...
                   X_val, Y_val, ...
-                  lambda);
+                  lambda,num_iters);
 
 plot(1:m, error_train, 1:m, error_val);
 pause;
@@ -45,7 +49,7 @@ pause;
 
 
 theta = rand(size(X_train,1),1);
-[J, grad] = linearRegCostFunction(X_train, Y_train, theta, 0);
+[J, grad] = linearRegCostFunction(X_train, Y_train, theta, 0,num_iters);
 [Y_vali pos] = sort(Y_val);
 
 Y_predition  = (X_val'*grad); 
